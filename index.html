@@ -30,6 +30,7 @@ header button{background:rgba(255,255,255,.18);color:#fff;border:0;border-radius
 .f label{font-size:12px;color:var(--mut);font-weight:600}
 .f input,.f textarea,.f select{font:inherit;font-size:16px;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;color:var(--ink);width:100%;min-width:0}
 .f input:focus,.f textarea:focus{outline:2px solid var(--red);border-color:transparent}
+.f input:not([type=date]):not([data-n]):not([data-c]),.f textarea{text-transform:uppercase}
 .f input.auto{background:#FAFAFB}
 .f input.auto::placeholder{color:#111;opacity:.55}
 .f .hint{font-size:11px;color:var(--mut)}
@@ -160,7 +161,7 @@ function buildForm(){
  }
  $('#form').innerHTML=h;
  document.querySelectorAll('#form [data-k]').forEach(el=>{
-  el.addEventListener('input',()=>{V[el.dataset.k]=el.value;update(el)});
+  el.addEventListener('input',()=>{if(!el.dataset.n&&!el.dataset.c&&el.type!=='date'){const p=el.selectionStart,u=el.value.toUpperCase();if(u!==el.value){el.value=u;try{el.setSelectionRange(p,p)}catch(e){}}el.setAttribute('autocapitalize','characters')}V[el.dataset.k]=el.value;update(el)});
   if(el.dataset.n||el.dataset.c)el.addEventListener('blur',()=>{if(el.value!==''&&el.dataset.n)el.value=el.value.replace(/,/g,'')});
  });
 }
@@ -199,7 +200,7 @@ function paper(){
  const ms=k=>money(V[k]);
  let h=borders();
  const T=(cl,r1,c1,r2,c2,t)=>cell('c '+cl,r1,c1,r2,c2,t);
- const X=esc;
+ const X=v=>esc(String(v==null?'':v).toUpperCase());
  h+=cell('title',1,1,4,7,'VEHICLE SALES ORDER');
  h+=T('b s11',2,10,2,13,'YUSMANIDA AUTO SDN BHD');
  h+=T('',3,10,3,13,'LOT 28808, PERSIARAN E1/1, SRI PRISTANA');
