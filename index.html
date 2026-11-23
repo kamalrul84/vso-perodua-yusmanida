@@ -52,17 +52,18 @@ dialog::backdrop{background:rgba(0,0,0,.4)}
 .it button.d{color:var(--red)}
 @media(min-width:900px){.wrap{grid-template-columns:minmax(380px,460px) minmax(0,1fr);align-items:start}.wrap>.tabs{display:none}.pane-prev{position:sticky;top:70px}}
 /* ===== PAPER ===== */
-.page{width:595.2pt;height:841.68pt;background:#fff;position:relative;transform-origin:0 0;color:#000;font-family:Calibri,Carlito,sans-serif;overflow:hidden}
-.sheet{position:absolute;left:65pt;top:14pt;width:595pt;transform:scale(.8);transform-origin:0 0;display:grid;grid-template-columns:repeat(13,45.75pt)}
+.page{width:595.28pt;height:841.89pt;background:#fff;position:relative;transform-origin:0 0;color:#000;font-family:Calibri,Carlito,sans-serif;overflow:hidden}
+.sheet{position:absolute;left:0;top:0;width:611.25pt;transform:scale(.8);transform-origin:0 0;display:grid;grid-template-columns:repeat(10,45.75pt) 62.25pt 45.75pt 45.75pt}
 .sheet>*{min-width:0;min-height:0}
 .c{display:flex;align-items:center;padding:0 3pt;font-size:10pt;white-space:nowrap;overflow:hidden}
-.c.v{font-size:11pt;font-weight:600}
+.c.v{font-size:11pt}
 .c.r{justify-content:flex-end}.c.m{justify-content:center}.c.top{align-items:flex-start;white-space:normal;padding-top:2pt}
 .c.b{font-weight:700}.c.s8{font-size:8pt}.c.s9{font-size:9pt}.c.s11{font-size:11pt}.c.s12{font-size:12pt}
-.bx{border:.75pt solid #000;pointer-events:none}
+.bd{pointer-events:none}
 .bb{border-bottom:.75pt solid #000}
 .bt{border-top:.75pt solid #000}
-.title{font-family:'Cooper Black','Cooper Std Black',Georgia,serif;font-size:22pt;font-weight:900;display:flex;align-items:center;padding-left:3pt}
+.title{font-family:'Cooper Black','Cooper Std Black',Georgia,serif;font-size:22pt;font-weight:900;display:flex;align-items:center;justify-content:center;background:#595959;color:#fff}
+.c.ov{overflow:visible}.c.l{justify-content:flex-start}.c.s10{font-size:10pt}.c.s14{font-size:14pt}.c.s18{font-size:18pt}
 @media print{
  @page{size:A4;margin:0}
  html,body{background:#fff!important;padding:0!important}
@@ -174,79 +175,82 @@ function syncForm(skip){
 }
 
 /* ===== paper ===== */
-const ROWS=[];for(let r=1;r<=62;r++){ROWS[r]=15}
+const MRG=[[16,9,16,11],[21,7,21,8],[43,7,43,8],[17,3,17,6],[15,1,15,2],[52,7,52,8],[7,11,8,13],[32,12,32,13],[42,7,42,8],[27,7,27,8],[7,7,8,7],[18,9,18,11],[23,7,23,8],[12,11,12,13],[48,7,48,8],[11,8,11,10],[17,7,17,8],[1,1,4,7],[18,3,18,6],[16,1,16,2],[8,1,8,6],[33,12,33,13],[53,7,53,8],[15,3,15,6],[12,8,12,10],[17,9,17,11],[23,12,23,13],[18,1,18,2],[18,7,18,8],[28,7,28,8],[49,7,49,8],[17,12,18,13],[35,12,35,13],[10,11,10,13],[24,7,24,8],[15,7,15,8],[9,1,9,6],[16,3,16,6],[45,7,45,8],[11,11,11,13],[17,1,17,2],[36,12,36,13],[31,12,31,13],[15,9,15,11],[22,12,22,13],[26,7,26,8],[55,7,55,8],[7,8,8,10],[10,8,10,10],[34,12,34,13],[21,12,21,13],[47,7,47,8],[9,11,9,13],[16,7,16,8],[54,7,54,8],[25,7,25,8],[41,7,41,8],[15,12,16,13],[9,8,9,10],[44,7,44,8],[22,7,22,8],[40,7,40,8],[46,7,46,8],[7,1,7,6],[39,10,40,13]];
+const BRD=[[7,1,"lrt"],[7,2,"t"],[7,3,"t"],[7,4,"t"],[7,5,"t"],[7,6,"rt"],[7,7,"t"],[7,8,"rt"],[7,9,"t"],[7,10,"rt"],[7,11,"lrtb"],[7,12,"t"],[7,13,"rt"],[8,1,"lr"],[8,6,"r"],[8,10,"r"],[8,11,"lb"],[8,12,"b"],[8,13,"rb"],[9,1,"lr"],[9,6,"r"],[9,7,"t"],[9,8,"rt"],[9,9,"t"],[9,10,"rt"],[9,11,"rt"],[9,12,"t"],[9,13,"rt"],[10,1,"l"],[10,6,"r"],[10,8,"r"],[10,10,"r"],[10,11,"r"],[10,13,"r"],[11,1,"l"],[11,6,"r"],[11,8,"r"],[11,10,"r"],[11,11,"r"],[11,13,"r"],[12,1,"lb"],[12,2,"b"],[12,3,"b"],[12,4,"b"],[12,5,"b"],[12,6,"rb"],[12,7,"b"],[12,8,"rb"],[12,9,"b"],[12,10,"rb"],[12,11,"rb"],[12,12,"b"],[12,13,"rb"],[13,1,"bm"],[13,2,"bm"],[13,3,"bm"],[13,4,"bm"],[13,5,"bm"],[13,6,"bm"],[13,7,"bm"],[13,8,"bm"],[13,9,"bm"],[13,10,"bm"],[13,11,"tbm"],[13,12,"tbm"],[13,13,"tbm"],[15,1,"lrtb"],[15,2,"rtb"],[15,3,"lrtb"],[15,4,"tb"],[15,5,"tb"],[15,6,"rtb"],[15,7,"lrtb"],[15,8,"rtb"],[15,9,"lrtb"],[15,10,"tb"],[15,11,"rtb"],[15,12,"lrtb"],[15,13,"rt"],[16,1,"lrtb"],[16,2,"rtb"],[16,3,"lrtb"],[16,4,"tb"],[16,5,"tb"],[16,6,"rtb"],[16,7,"lrtb"],[16,8,"rtb"],[16,9,"lrtb"],[16,10,"tb"],[16,11,"rtb"],[16,12,"lb"],[16,13,"rb"],[17,1,"lrtb"],[17,2,"rtb"],[17,3,"lrtb"],[17,4,"tb"],[17,5,"tb"],[17,6,"rtb"],[17,7,"lrtb"],[17,8,"rtb"],[17,9,"lrtb"],[17,10,"tb"],[17,11,"rtb"],[17,12,"lrtb"],[17,13,"rt"],[18,1,"lrtb"],[18,2,"rtb"],[18,3,"lrtb"],[18,4,"tb"],[18,5,"tb"],[18,6,"rtb"],[18,7,"lrtb"],[18,8,"rtb"],[18,9,"lrtb"],[18,10,"tb"],[18,11,"rtb"],[18,12,"lb"],[18,13,"rb"],[20,7,"b"],[20,8,"b"],[21,7,"tb"],[21,8,"tb"],[21,12,"b"],[21,13,"b"],[22,7,"tb"],[22,8,"tb"],[22,12,"b"],[22,13,"b"],[23,7,"tb"],[23,8,"tb"],[23,12,"b"],[23,13,"b"],[24,7,"tb"],[24,8,"tb"],[25,7,"tb"],[25,8,"tb"],[26,7,"tb"],[26,8,"tb"],[27,7,"tb"],[27,8,"tb"],[28,7,"tb"],[28,8,"tb"],[29,1,"b"],[29,2,"b"],[29,3,"b"],[29,5,"b"],[30,1,"b"],[30,2,"b"],[30,3,"b"],[30,5,"b"],[31,1,"b"],[31,2,"b"],[31,3,"b"],[31,5,"b"],[31,12,"b"],[31,13,"b"],[32,1,"b"],[32,2,"b"],[32,3,"b"],[32,5,"b"],[32,12,"b"],[32,13,"b"],[33,1,"b"],[33,2,"b"],[33,3,"b"],[33,5,"b"],[33,12,"b"],[33,13,"b"],[34,12,"b"],[34,13,"b"],[35,12,"b"],[35,13,"b"],[36,12,"b"],[36,13,"b"],[39,7,"b"],[39,8,"b"],[40,7,"tb"],[40,8,"tb"],[41,7,"tb"],[41,8,"tb"],[42,7,"tb"],[42,8,"tb"],[43,7,"tb"],[43,8,"tb"],[44,7,"tb"],[44,8,"tb"],[45,7,"tb"],[45,8,"tb"],[46,7,"tb"],[46,8,"tb"],[47,7,"tb"],[47,8,"tb"],[48,7,"tb"],[48,8,"tb"],[49,7,"tbd"],[49,8,"tbd"],[51,7,"b"],[51,8,"b"],[52,7,"tb"],[52,8,"tb"],[53,7,"tb"],[53,8,"tb"],[54,7,"tb"],[54,8,"tb"],[55,7,"tb"],[55,8,"tb"],[58,1,"bm"],[58,2,"bm"],[58,3,"bm"],[58,4,"bm"],[58,5,"bm"],[58,6,"bm"],[58,7,"bm"],[58,8,"bm"],[58,9,"bm"],[58,10,"bm"],[58,11,"bm"],[58,12,"bm"],[58,13,"bm"]];
+const ROWS=[];for(let r=1;r<=64;r++)ROWS[r]=15;
 [7,8,9,10,11,12].forEach(r=>ROWS[r]=15.75);ROWS[13]=6;for(let r=20;r<=57;r++)ROWS[r]=17.25;ROWS[58]=15.75;
+const SHEET_W=611.25,SHEET_H=ROWS.slice(1).reduce((a,b)=>a+b,0);
 function area(r1,c1,r2,c2){return `grid-area:${r1}/${c1}/${r2+1}/${c2+1}`}
 function cell(cls,r1,c1,r2,c2,txt,extra){return `<div class="${cls}" style="${area(r1,c1,r2,c2)};${extra||''}">${txt}</div>`}
+const W={'':'.75pt solid #000',m:'1.5pt solid #000',d:'2.25pt double #000'};
+function inMV(r,c){return MRG.some(m=>m[0]<=r&&r<=m[2]&&m[1]<c&&c<=m[3])}
+function inMH(r,c){return MRG.some(m=>m[0]<r&&r<=m[2]&&m[1]<=c&&c<=m[3])}
+function borders(){
+ const Vv={},Hh={},rank=x=>x==='d'?3:x==='m'?2:1;
+ const put=(o,k,w)=>{if(!o[k]||rank(w)>rank(o[k]))o[k]=w};
+ for(const [r,c,f] of BRD){const m=f.match(/[lrtb][md]?/g);for(const e of m){const k=e[0],w=e.slice(1);
+  if(k==='l')put(Vv,r+','+c,w);if(k==='r')put(Vv,r+','+(c+1),w);if(k==='t')put(Hh,r+','+c,w);if(k==='b')put(Hh,(r+1)+','+c,w);}}
+ let h='';
+ for(const k in Vv){const [r,c]=k.split(',').map(Number);if(inMV(r,c))continue;h+=cell('bd',r,c>13?13:c,r,c>13?13:c,'',(c>13?'border-right:':'border-left:')+W[Vv[k]])}
+ for(const k in Hh){const [r,c]=k.split(',').map(Number);if(inMH(r,c))continue;h+=cell('bd',r>64?64:r,c,r>64?64:r,c,'',(r>64?'border-bottom:':'border-top:')+W[Hh[k]])}
+ return h;
+}
 function paper(){
  const o=calc(V);const A=k=>(V[k]!==undefined&&V[k]!=='')?money(V[k]):fmt(o[k]||0);
  const ms=k=>money(V[k]);
- let h='';
- const L=(r,c1,c2,t,cl)=>cell('c '+(cl||''),r,c1,r,c2,t);
- const Vv=(r1,c1,r2,c2,t,cl)=>cell('c v '+(cl||''),r1,c1,r2,c2,esc(t));
- // header
+ let h=borders();
+ const T=(cl,r1,c1,r2,c2,t)=>cell('c '+cl,r1,c1,r2,c2,t);
+ const X=esc;
  h+=cell('title',1,1,4,7,'VEHICLE SALES ORDER');
- h+=cell('c b s12',2,10,2,13,'YUSMANIDA AUTO SDN BHD');
- h+=cell('c s9',3,10,3,13,'LOT 28808, PERSIARAN E1/1, SRI PRISTANA');
- h+=cell('c s9',4,10,4,13,'47000 SUNGAI BULOH,SELANGOR DARUL EHSAN');
- h+=cell('c s9',5,10,5,13,'TEL : 03-6128 4609 FAX: 03-6128 4610');
- h+=L(6,1,6,'CUSTOMER NAME:','b');
- // customer boxes
- h+=cell('bx',7,1,12,6,'');h+=cell('bx',7,7,12,10,'');h+=cell('bx',7,11,12,13,'');
- h+=cell('bt',9,7,9,10,'');h+=cell('bt',9,11,9,13,'');
- h+=Vv(7,1,7,6,V.cname,'s12');
- ['addr1','addr2','addr3','addr4'].forEach((k,i)=>h+=Vv(8+i,1,8+i,6,V[k]));
- h+=L(7,7,7,'NRIC:');h+=Vv(7,8,8,10,V.nric);
- h+=L(9,7,7,'TEL:');h+=Vv(9,8,9,10,V.tel1);
- h+=L(10,7,7,'TEL:');h+=Vv(10,8,10,10,V.tel2);
- h+=L(11,7,7,'TEL (G):');h+=Vv(11,8,11,10,V.telg);
- h+=L(12,7,7,'OFF:');h+=Vv(12,8,12,10,V.off);
- h+=cell('c',7,11,8,13,'DATE:&nbsp;<span class="v" style="font-size:11pt;font-weight:600">'+esc(dfmt(V.date))+'</span>');
- h+=L(9,11,13,'SALES ADVISOR:');h+=Vv(10,11,10,13,V.sa);h+=Vv(11,11,11,13,V.satel);
- // order particulars
- h+=L(14,1,6,'Order Partiulars','b s11');
- const grid=[[15,'MODEL','model','DESCRIPTION','desc'],[16,'ENGINE NO','engine','ENGINE C.C','cc'],[17,'CHASSIS NO','chassis','SALES TYPE','stype'],[18,'COLOUR','colour','TERM','term']];
- for(const [r,l1,k1,l2,k2] of grid){
-  h+=cell('c bx b',r,1,r,2,l1)+cell('c bx v',r,3,r,6,esc(V[k1]))+cell('c bx b',r,7,r,8,l2)+cell('c bx v',r,9,r,11,esc(V[k2]));
+ h+=T('b s11',2,10,2,13,'YUSMANIDA AUTO SDN BHD');
+ h+=T('',3,10,3,13,'LOT 28808, PERSIARAN E1/1, SRI PRISTANA');
+ h+=T('',4,10,4,13,'47000 SUNGAI BULOH,SELANGOR DARUL EHSAN');
+ h+=T('',5,10,5,13,'TEL : 03-6128 4609 FAX: 03-6128 4610');
+ h+=T('b s11',6,1,6,6,'CUSTOMER NAME:');
+ h+=T('b s12',7,1,7,6,X(V.cname));
+ ['addr1','addr2','addr3','addr4'].forEach((k,i)=>h+=T('b s12',8+i,1,8+i,6,X(V[k])));
+ h+=T('b s12',7,7,8,7,'NRIC:');h+=T('b s12',7,8,8,10,X(V.nric));
+ [[9,'TEL:','tel1'],[10,'TEL:','tel2'],[11,'TEL (G):','telg'],[12,'OFF:','off']].forEach(([r,l,k])=>{h+=T('b s12',r,7,r,7,l);h+=T('b s12',r,8,r,10,X(V[k]))});
+ h+=T('b s12 m',7,11,8,13,'DATE: '+X(dfmt(V.date)));
+ h+=T('b s12 m',9,11,9,13,'SALES ADVISOR:');h+=T('b s14 m',10,11,10,13,X(V.sa));h+=T('b s14 m',11,11,11,13,X(V.satel));
+ h+=T('b s11',14,1,14,6,'Order Partiulars');
+ for(const [r,l1,k1,l2,k2] of [[15,'MODEL','model','DESCRIPTION','desc'],[16,'ENGINE NO','engine','ENGINE C.C','cc'],[17,'CHASSIS NO','chassis','SALES TYPE','stype'],[18,'COLOUR','colour','TERM','term']]){
+  h+=T('b s11 l',r,1,r,2,l1)+T('b s11 m',r,3,r,6,X(V[k1]))+T('b s11 l',r,7,r,8,l2)+T('b s11 m',r,9,r,11,X(V[k2]));
  }
- h+=cell('c bx b m s8',15,12,16,13,'Appoximate<br>Delivery Date');
- h+=cell('c bx v m',17,12,18,13,esc(V.deliv));
- // price structure
- h+=L(20,1,6,'PRICE STRUCTURE','b s11');h+=L(20,7,8,'RM','b m');h+=L(20,10,13,'FINANCE','b s11');
- const pl=[[21,'GOVT APPOVED  NET SELLING PRICE',ms('net')],[22,'GOVT APPOVED STANDART ACCESSORIES',ms('std')],[23,'SUB TOTAL',A('g23')],[24,'INPECTION FEE',ms('insp')],[25,'ADMIN HANDLING',ms('admin')],[26,'NUMBER PLATE',ms('plate')],[27,'METALLIC PAINT',ms('metal')],[28,'OPTIONAL ACCESSORIES PACKAGE GEAR UP',ms('opt')]];
- for(const [r,l,v] of pl){h+=L(r,1,6,l);h+=cell('c v r bx',r,7,r,8,v)}
- // finance
- [[21,'MADE YEAR',V.fyear],[22,'AMOUNT FINANCED',money(V.famt)],[23,'FINANCE PERIOD',V.fper]].forEach(([r,l,v])=>{h+=L(r,10,11,l);h+=cell('c v bx',r,12,r,13,esc(v))});
- // accessories lines
- ACC.forEach((i,j)=>{const r=29+j;h+=cell('c v bb',r,1,r,3,esc(V['acc'+i]));h+=cell('c v r bb',r,5,r,5,ms('acca'+i))});
- h+=L(34,5,6,'APA TOTAL','b r');h+=cell('c v r bx',34,7,34,8,A('apa'));
- h+=L(35,1,3,'MISCELLANEOUS');h+=cell('c v r bx',35,7,35,8,ms('misc'));
- h+=L(36,1,3,'SUB TOTAL');h+=cell('c v r bx',36,7,36,8,A('g36'));
- h+=L(37,1,3,'LESS');h+=cell('c v r bx',37,7,37,8,ms('less'));
- // trade-in
- h+=L(30,10,13,'TRADE -IN VEHICLE PARTICULARS','b s11');
- [[31,'APPRAISAL NUMBER',V.ta_no],[32,'APPRAISAL DATE',dfmt(V.ta_date)],[33,'MODEL DESCRIPTION',V.ta_model],[34,'REGISTRATION NUMBER',V.ta_reg],[35,'YEAR OF MANUFACTURED',V.ta_ymf],[36,'YEAR OF REGISTRATION',V.ta_yreg]].forEach(([r,l,v])=>{h+=L(r,10,11,l,'s8');h+=cell('c v bx',r,12,r,13,esc(v))});
- // totals
- h+=L(39,1,6,'SUB TOTAL WITHOUT GOOD SERVICE TAX');h+=cell('c v r bx',39,7,39,8,A('h39'));
- h+=cell('c bx top',39,10,45,13,'<div><b>*REMARK</b><br><span class="v" style="font-size:10.5pt;font-weight:600;white-space:pre-wrap">'+esc(V.remark)+'</span></div>');
- h+=L(40,1,3,'GOOD SERVIS TAX (GST)');h+=cell('c',40,4,40,4,esc(String(N(V.rate)))+'%');h+=cell('c v r bx',40,7,40,8,A('gst'));
- const t2=[[41,'CUKAI BARANG & PERKHIDMATAN',ms('sst')],[42,'SUB TOTAL WITH GST',A('g42')],[43,'ROAD TAX',ms('road')],[44,'REGISTRATION FEES',ms('regfee')],[45,'HP OWNERSHIP',ms('hp')],[46,'INSUREN PREMIUM',ms('ins')],[47,'TOTAL PRICE WITH GST',A('g47')],[48,'ROUNDING ADJUSTMENT',A('g48')],[49,'PURCHASE PRICE',A('g49')]];
- for(const [r,l,v] of t2){h+=L(r,1,6,l,[42,47,49].includes(r)?'b':'');h+=cell('c v r bx',r,7,r,8,v)}
- h+=L(51,1,6,'LESS PAYMENT','b');
- [[52,'OUTSTANDING SUM',A('g52')],[53,'TRADE-IN PRICE',ms('tradein')],[54,'HP SETTLEMENT',ms('hpset')],[55,'TOTAL OUTSTANDING',A('g55')]].forEach(([r,l,v])=>{h+=L(r,1,6,l,r===55?'b':'');h+=cell('c v r bx',r,7,r,8,v)});
- h+=cell('bt',58,1,58,13,'');
- h+=L(59,1,1,'Note','s8 b');
- ['1.All payment by CHEQUES should be crossed and made payable to " YUSMANIDA AUTO SDN BHD','2.Insist on  official Receipt immediately if payment is made by CASH .if you do not receive an Officer Receipt within seven','days,please notify the manager immediately.','3.the credit term if any should be strictly dhered to failing which interest at 1.5% per month will be charged'].forEach((t,i)=>h+=cell('c s8',59+i,2,59+i,13,t));
+ h+=T('s8 m ov',15,12,16,13,'Appoximate Delivery Date');
+ h+=T('b s18 m',17,12,18,13,X(V.deliv));
+ h+=T('b s12',20,1,20,6,'PRICE STRUCTURE');h+=T('b s11 r',20,8,20,8,'RM');h+=T('b s12',20,10,20,13,'FINANCE');
+ const pl=[[21,'GOVT APPOVED  NET SELLING PRICE',ms('net'),1],[22,'GOVT APPOVED STANDART ACCESSORIES',ms('std'),0],[23,'SUB TOTAL',A('g23'),0],[24,'INPECTION FEE',ms('insp'),0],[25,'ADMIN HANDLING',ms('admin'),0],[26,'NUMBER PLATE',ms('plate'),1],[27,'METALLIC PAINT',ms('metal'),0],[28,'OPTIONAL ACCESSORIES PACKAGE GEAR UP',ms('opt'),0]];
+ for(const [r,l,v,b] of pl){h+=T('s10 '+(b?'b':''),r,1,r,6,l);h+=T('s11 r '+(b?'b':''),r,7,r,8,v)}
+ [[21,'MADE YEAR',X(V.fyear)],[22,'AMOUNT FINANCED',money(V.famt)],[23,'FINANCE PERIOD',X(V.fper)]].forEach(([r,l,v])=>{h+=T('b s11',r,10,r,11,l);h+=T('b s14 r',r,12,r,13,v)});
+ ACC.forEach((i,j)=>{const r=29+j;h+=T('s11',r,1,r,3,X(V['acc'+i]));h+=T('s11 r',r,5,r,5,ms('acca'+i))});
+ h+=T('s10',34,5,34,6,'APA TOTAL');h+=T('s11 r',34,7,34,8,A('apa'));
+ h+=T('s10',35,1,35,3,'MISCELLANEOUS');h+=T('s11 r',35,7,35,8,ms('misc'));
+ h+=T('s10',36,1,36,3,'SUB TOTAL');h+=T('s11 r',36,7,36,8,A('g36'));
+ h+=T('s10',37,1,37,3,'LESS');h+=T('s11 r',37,7,37,8,ms('less'));
+ h+=T('s10',30,10,30,13,'TRADE -IN VEHICLE PARTICULARS');
+ [[31,'APPRAISAL NUMBER',V.ta_no],[32,'APPRAISAL DATE',dfmt(V.ta_date)],[33,'MODEL DESCRIPTION',V.ta_model],[34,'REGISTRATION NUMBER',V.ta_reg],[35,'YEAR OF MANUFACTURED',V.ta_ymf],[36,'YEAR OF REGISTRATION',V.ta_yreg]].forEach(([r,l,v])=>{h+=T('s10',r,10,r,11,l);h+=T('s11 r',r,12,r,13,X(v))});
+ h+=T('s10',39,1,39,6,'SUB TOTAL WITHOUT GOOD SERVICE TAX');h+=T('s11 r',39,7,39,8,A('h39'));
+ h+=T('s14 l',39,10,40,13,'*REMARK');
+ h+=cell('c s11 top',41,10,45,13,'<span style="white-space:pre-wrap">'+X(V.remark)+'</span>');
+ h+=T('s10 b',40,1,40,3,'GOOD SERVIS TAX (GST)');h+=T('s11 l',40,4,40,4,X(String(N(V.rate)))+'%');h+=T('s11 r b',40,7,40,8,A('gst'));
+ const t2=[[41,'CUKAI BARANG & PERKHIDMATAN',ms('sst'),0,11],[42,'SUB TOTAL WITH GST',A('g42'),0,11],[43,'ROAD TAX',ms('road'),1,11],[44,'REGISTRATION FEES',ms('regfee'),1,11],[45,'HP OWNERSHIP',ms('hp'),1,11],[46,'INSUREN PREMIUM',ms('ins'),1,11],[47,'TOTAL PRICE WITH GST',A('g47'),0,11],[48,'ROUNDING ADJUSTMENT',A('g48'),0,11],[49,'PURCHASE PRICE',A('g49'),1,14]];
+ for(const [r,l,v,b,sz] of t2){h+=T((sz===14?'s14 ':'s10 ')+(b?'b':''),r,1,r,6,l);h+=T('r '+(b?'b ':'')+(sz===14?'s14':'s11'),r,7,r,8,v)}
+ h+=T('s10',51,1,51,6,'LESS PAYMENT ');
+ [[52,'OUTSTANDING SUM',A('g52')],[53,'TRADE-IN PRICE',ms('tradein')],[54,'HP SETTLEMENT',ms('hpset')],[55,'TOTAL OUTSTANDING',A('g55')]].forEach(([r,l,v])=>{h+=T('s10',r,1,r,6,l);h+=T('s11 r',r,7,r,8,v)});
+ h+=T('s11',59,1,59,1,'Note');
+ ['1.All payment by CHEQUES should be crossed and made payable to " YUSMANIDA AUTO SDN BHD','2.Insist on  official Receipt immediately if payment is made by CASH .if you do not receive an Officer Receipt within seven','days,please notify the manager immediately.','3.the credit term if any should be strictly dhered to failing which interest at 1.5% per month will be charged'].forEach((t,i)=>h+=T('s11',59+i,2,59+i,13,t));
  const sh=$('#sheet');sh.style.gridTemplateRows=ROWS.slice(1).map(x=>x+'pt').join(' ');
+ sh.style.left=((595.28-SHEET_W*.8)/2)+'pt';sh.style.top=((841.89-SHEET_H*.8)/2)+'pt';
  sh.innerHTML=h;
 }
 /* ===== scaling ===== */
 function fit(){
  const box=$('#sbox'),st=box.parentElement;
  if(getComputedStyle(st).display==='none'||box.offsetParent===null)return;
- const W=st.clientWidth-20,pw=595.2*96/72,s=Math.min(1,W/pw);
+ const W=st.clientWidth-20,pw=595.28*96/72,s=Math.min(1,W/pw);
  $('#page').style.transform='scale('+s+')';
- box.style.width=pw*s+'px';box.style.height=841.68*96/72*s+'px';
+ box.style.width=pw*s+'px';box.style.height=841.89*96/72*s+'px';
 }
 function update(skip){syncForm(skip);paper();persist();fit()}
 
