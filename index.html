@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Vehicle Sales Order</title>
+<meta name="theme-color" content="#EB0A1E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#EB0A1E;--red-d:#B80716;--ink:#1A1A1A;--mut:#6B6F76;--line:#E3E5E8;--bg:#F4F5F7;--r:14px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:84px}
+header{background:var(--red);color:#fff;padding:14px 16px;position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px}
+header h1{font-size:17px;margin:0;flex:1}
+header button{background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600}
+.wrap{max-width:1200px;margin:0 auto;padding:12px;display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}.wrap>*{min-width:0}
+
+@media(max-width:899px){.wrap[data-v="form"] .pane-prev{display:none}.wrap[data-v="prev"] .pane-form{display:none}}
+.tabs{display:flex;background:#fff;border-radius:12px;padding:4px;border:1px solid var(--line)}
+.tabs button{flex:1;border:0;background:none;padding:10px;border-radius:9px;font-weight:600;color:var(--mut);font-size:14px}
+.wrap[data-v="form"] .tabs [data-t=form],.wrap[data-v="prev"] .tabs [data-t=prev]{background:var(--red);color:#fff}
+.card{background:#fff;border-radius:var(--r);border:1px solid var(--line);padding:14px;margin-bottom:12px}
+.card h2{margin:0 0 10px;font-size:14px;letter-spacing:.3px;color:var(--red-d);text-transform:uppercase}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f{display:flex;flex-direction:column;gap:4px;min-width:0}
+.f.w{grid-column:1/-1}
+.f label{font-size:12px;color:var(--mut);font-weight:600}
+.f input,.f textarea,.f select{font:inherit;font-size:16px;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff;color:var(--ink);width:100%;min-width:0}
+.f input:focus,.f textarea:focus{outline:2px solid var(--red);border-color:transparent}
+.f input.auto{background:#FAFAFB}
+.f input.auto::placeholder{color:#111;opacity:.55}
+.f .hint{font-size:11px;color:var(--mut)}
+.f input.ov{border-color:var(--red)}
+.accrow{display:grid;grid-template-columns:1fr 110px;gap:8px;margin-bottom:8px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;z-index:6}
+.bar button{flex:1;min-width:0;border:1px solid var(--line);background:#fff;border-radius:12px;padding:13px 6px;font-size:14px;font-weight:700;white-space:nowrap;color:var(--ink)}
+.bar button.p{background:var(--red);border-color:var(--red);color:#fff;flex:1.3}
+.bar button.wa{background:#25D366;border-color:#25D366;color:#fff}
+.stage{background:#D8DADE;border-radius:12px;padding:10px;overflow:hidden}
+.stagebox{position:relative;margin:0 auto;overflow:hidden}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;z-index:20;display:none}
+dialog{border:0;border-radius:16px;padding:0;width:min(92vw,460px);max-height:80vh}
+dialog::backdrop{background:rgba(0,0,0,.4)}
+.dh{padding:14px 16px;font-weight:700;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.dl{overflow:auto;max-height:60vh}
+.it{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.it div{flex:1;min-width:0}.it b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.it small{color:var(--mut)}
+.it button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;font-weight:600}
+.it button.d{color:var(--red)}
+@media(min-width:900px){.wrap{grid-template-columns:minmax(380px,460px) minmax(0,1fr);align-items:start}.wrap>.tabs{display:none}.pane-prev{position:sticky;top:70px}}
+/* ===== PAPER ===== */
+.page{width:595.2pt;height:841.68pt;background:#fff;position:relative;transform-origin:0 0;color:#000;font-family:Calibri,Carlito,sans-serif;overflow:hidden}
+.sheet{position:absolute;left:65pt;top:14pt;width:595pt;transform:scale(.8);transform-origin:0 0;display:grid;grid-template-columns:repeat(13,45.75pt)}
+.sheet>*{min-width:0;min-height:0}
+.c{display:flex;align-items:center;padding:0 3pt;font-size:10pt;white-space:nowrap;overflow:hidden}
+.c.v{font-size:11pt;font-weight:600}
+.c.r{justify-content:flex-end}.c.m{justify-content:center}.c.top{align-items:flex-start;white-space:normal;padding-top:2pt}
+.c.b{font-weight:700}.c.s8{font-size:8pt}.c.s9{font-size:9pt}.c.s11{font-size:11pt}.c.s12{font-size:12pt}
+.bx{border:.75pt solid #000;pointer-events:none}
+.bb{border-bottom:.75pt solid #000}
+.bt{border-top:.75pt solid #000}
+.title{font-family:'Cooper Black','Cooper Std Black',Georgia,serif;font-size:22pt;font-weight:900;display:flex;align-items:center;padding-left:3pt}
+@media print{
+ @page{size:A4;margin:0}
+ html,body{background:#fff!important;padding:0!important}
+ header,.wrap>.tabs,.pane-form,.bar,.toast,.stage-pad{display:none!important}
+ .wrap{display:block!important;padding:0!important;max-width:none}
+ .pane-prev{display:block!important;position:static!important}
+ .stage{background:none!important;padding:0!important}
+ .stagebox{width:auto!important;height:auto!important;overflow:visible!important}
+ .page{transform:none!important;position:static!important}
+}
+</style>
+</head>
+<body>
+<header><h1>Vehicle Sales Order</h1><button id="bList">Senarai</button><button id="bNew">Baru</button></header>
+<div class="wrap" data-v="form" id="wrap">
+ <div class="tabs"><button data-t="form">Isi</button><button data-t="prev">Pratonton</button></div>
+ <div class="pane-form" id="form"></div>
+ <div class="pane-prev"><div class="stage"><div class="stagebox" id="sbox"><div class="page" id="page"><div class="sheet" id="sheet"></div></div></div></div></div>
+</div>
+<div class="bar">
+ <button class="p" id="bPrint">Cetak / PDF</button>
+ <button class="wa" id="bShare">WhatsApp</button>
+ <button id="bSave">Simpan</button>
+</div>
+<div class="toast" id="toast"></div>
+<dialog id="dlg"><div class="dh"><span>Order tersimpan</span><button id="dClose" style="border:0;background:none;font-size:18px">✕</button></div><div class="dl" id="dl"></div></dialog>
+<script>
+const $=s=>document.querySelector(s);
+const DEF={sa:'KAMAL',satel:'012-434 8978',deliv:'A.S.A.P',rate:'6'};
+/* form sections: [title, [id,label,type,span]] */
+const SEC=[
+['Pelanggan',[['cname','Nama pelanggan','t',1],['addr1','Alamat 1','t',1],['addr2','Alamat 2','t',1],['addr3','Alamat 3','t',1],['addr4','Poskod / bandar','t',1],['nric','No. NRIC','t'],['tel1','Tel','t'],['tel2','Tel (2)','t'],['telg','Tel (G)','t'],['off','Office','t'],['date','Tarikh','d'],['sa','Sales advisor','t'],['satel','Tel sales advisor','t']]],
+['Butiran kenderaan',[['model','Model','t'],['desc','Description','t'],['engine','Engine no','t'],['cc','Engine C.C','t'],['chassis','Chassis no','t'],['stype','Sales type','t'],['colour','Colour','t'],['term','Term','t'],['deliv','Approximate delivery date','t',1]]],
+['Struktur harga (RM)',[['net','Govt approved net selling price','n',1],['std','Govt approved standard accessories','n',1],['insp','Inspection fee','n'],['admin','Admin handling','n'],['plate','Number plate','n'],['metal','Metallic paint','n'],['opt','Optional accessories package gear up','n',1]]],
+['Aksesori APA',null],
+['Lain-lain',[['misc','Miscellaneous (RM)','n'],['less','Less / diskaun (RM)','n'],['rate','GST / cukai (%)','n'],['sst','Cukai barang & perkhidmatan','n'],['road','Road tax','n'],['regfee','Registration fees','n'],['hp','HP ownership','n'],['ins','Insuran premium','n']]],
+['Finance',[['fyear','Made year','t'],['famt','Amount financed','n'],['fper','Finance period','t']]],
+['Trade-in',[['ta_no','Appraisal number','t'],['ta_date','Appraisal date','d'],['ta_model','Model description','t',1],['ta_reg','Registration number','t'],['ta_ymf','Year manufactured','t'],['ta_yreg','Year registration','t'],['remark','*Remark','a',1]]],
+['Bayaran',[['tradein','Trade-in price','n'],['hpset','HP settlement','n']]],
+['Jumlah (auto, boleh ditulis ganti)',null]
+];
+const CALC=[['g23','Sub total'],['apa','APA total'],['g36','Sub total (misc + APA)'],['h39','Sub total tanpa GST'],['gst','GST'],['g42','Sub total dengan GST'],['g47','Total price with GST'],['g48','Rounding adjustment'],['g49','Purchase price'],['g52','Outstanding sum'],['g55','Total outstanding']];
+const ACC=[1,2,3,4,5];
+const N=v=>{const x=parseFloat(String(v==null?'':v).replace(/,/g,''));return isNaN(x)?0:x};
+const R2=x=>Math.round((x+Number.EPSILON)*100)/100;
+function calc(V){
+ const o={};
+ o.g23=N(V.net)+N(V.std);
+ const pre=eff('g23',o,V)+N(V.insp)+N(V.admin)+N(V.plate)+N(V.metal)+N(V.opt);
+ o.apa=ACC.reduce((s,i)=>s+N(V['acca'+i]),0);
+ o.g36=eff('apa',o,V)+N(V.misc);
+ o.h39=pre+eff('g36',o,V)-N(V.less);
+ o.gst=R2(eff('h39',o,V)*N(V.rate)/100);
+ o.g42=eff('h39',o,V)+eff('gst',o,V)+N(V.sst);
+ o.g47=eff('g42',o,V)+N(V.road)+N(V.regfee)+N(V.hp)+N(V.ins);
+ o.g48=R2(Math.round(eff('g47',o,V)*20)/20-eff('g47',o,V));
+ o.g49=eff('g47',o,V)+eff('g48',o,V);
+ o.g52=eff('g49',o,V);
+ o.g55=eff('g52',o,V)-N(V.tradein)+N(V.hpset);
+ for(const k in o)o[k]=R2(o[k]);
+ return o;
+}
+function eff(k,o,V){return (V[k]!==undefined&&V[k]!=='')?N(V[k]):(o[k]||0)}
+const fmt=x=>x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const money=(v)=>(v===''||v==null)?'':fmt(N(v));
+const dfmt=v=>{if(!v)return'';const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(v);return m?m[3]+'/'+m[2]+'/'+m[1]:v};
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let V={};
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+function fresh(){V=Object.assign({},DEF,{date:today()})}
+function load(){try{const d=JSON.parse(LS.get('so-draft')||'null');if(d&&d.V){V=d.V;return}}catch(e){}fresh()}
+function persist(){LS.set('so-draft',JSON.stringify({V}))}
+
+/* ===== form ===== */
+function buildForm(){
+ let h='';
+ for(const [t,fs] of SEC){
+  h+='<div class="card"><h2>'+t+'</h2>';
+  if(t==='Aksesori APA'){
+   h+='<div class="hint" style="font-size:12px;color:var(--mut);margin-bottom:8px">Senarai aksesori (maks 5 baris). APA total dikira auto.</div>';
+   for(const i of ACC)h+='<div class="accrow"><div class="f"><input data-k="acc'+i+'" placeholder="Aksesori '+i+'" autocomplete="off"></div><div class="f"><input data-k="acca'+i+'" data-n="1" inputmode="decimal" placeholder="RM"></div></div>';
+  }else if(fs===null){
+   h+='<div class="g">'+CALC.map(([k,l])=>'<div class="f"><label>'+l+'</label><input class="auto" data-k="'+k+'" data-c="1" inputmode="decimal"></div>').join('')+'</div>';
+  }else{
+   h+='<div class="g">';
+   for(const [k,l,ty,sp] of fs){
+    const w=(sp||ty==='a')?' w':'';
+    if(ty==='a')h+='<div class="f'+w+'"><label>'+l+'</label><textarea rows="3" data-k="'+k+'"></textarea></div>';
+    else h+='<div class="f'+w+'"><label>'+l+'</label><input data-k="'+k+'" '+(ty==='d'?'type="date"':ty==='n'?'inputmode="decimal" data-n="1"':'autocomplete="off"')+'></div>';
+   }
+   h+='</div>';
+  }
+  h+='</div>';
+ }
+ $('#form').innerHTML=h;
+ document.querySelectorAll('#form [data-k]').forEach(el=>{
+  el.addEventListener('input',()=>{V[el.dataset.k]=el.value;update(el)});
+  if(el.dataset.n||el.dataset.c)el.addEventListener('blur',()=>{if(el.value!==''&&el.dataset.n)el.value=el.value.replace(/,/g,'')});
+ });
+}
+function syncForm(skip){
+ const o=calc(V);
+ document.querySelectorAll('#form [data-k]').forEach(el=>{
+  const k=el.dataset.k;
+  if(el!==skip)el.value=V[k]==null?'':V[k];
+  if(el.dataset.c){el.placeholder=fmt(o[k]||0);el.classList.toggle('ov',V[k]!==undefined&&V[k]!=='')}
+ });
+}
+
+/* ===== paper ===== */
+const ROWS=[];for(let r=1;r<=62;r++){ROWS[r]=15}
+[7,8,9,10,11,12].forEach(r=>ROWS[r]=15.75);ROWS[13]=6;for(let r=20;r<=57;r++)ROWS[r]=17.25;ROWS[58]=15.75;
+function area(r1,c1,r2,c2){return `grid-area:${r1}/${c1}/${r2+1}/${c2+1}`}
+function cell(cls,r1,c1,r2,c2,txt,extra){return `<div class="${cls}" style="${area(r1,c1,r2,c2)};${extra||''}">${txt}</div>`}
+function paper(){
+ const o=calc(V);const A=k=>(V[k]!==undefined&&V[k]!=='')?money(V[k]):fmt(o[k]||0);
+ const ms=k=>money(V[k]);
+ let h='';
+ const L=(r,c1,c2,t,cl)=>cell('c '+(cl||''),r,c1,r,c2,t);
+ const Vv=(r1,c1,r2,c2,t,cl)=>cell('c v '+(cl||''),r1,c1,r2,c2,esc(t));
+ // header
+ h+=cell('title',1,1,4,7,'VEHICLE SALES ORDER');
+ h+=cell('c b s12',2,10,2,13,'YUSMANIDA AUTO SDN BHD');
+ h+=cell('c s9',3,10,3,13,'LOT 28808, PERSIARAN E1/1, SRI PRISTANA');
+ h+=cell('c s9',4,10,4,13,'47000 SUNGAI BULOH,SELANGOR DARUL EHSAN');
+ h+=cell('c s9',5,10,5,13,'TEL : 03-6128 4609 FAX: 03-6128 4610');
+ h+=L(6,1,6,'CUSTOMER NAME:','b');
+ // customer boxes
+ h+=cell('bx',7,1,12,6,'');h+=cell('bx',7,7,12,10,'');h+=cell('bx',7,11,12,13,'');
+ h+=cell('bt',9,7,9,10,'');h+=cell('bt',9,11,9,13,'');
+ h+=Vv(7,1,7,6,V.cname,'s12');
+ ['addr1','addr2','addr3','addr4'].forEach((k,i)=>h+=Vv(8+i,1,8+i,6,V[k]));
+ h+=L(7,7,7,'NRIC:');h+=Vv(7,8,8,10,V.nric);
+ h+=L(9,7,7,'TEL:');h+=Vv(9,8,9,10,V.tel1);
+ h+=L(10,7,7,'TEL:');h+=Vv(10,8,10,10,V.tel2);
+ h+=L(11,7,7,'TEL (G):');h+=Vv(11,8,11,10,V.telg);
+ h+=L(12,7,7,'OFF:');h+=Vv(12,8,12,10,V.off);
+ h+=cell('c',7,11,8,13,'DATE:&nbsp;<span class="v" style="font-size:11pt;font-weight:600">'+esc(dfmt(V.date))+'</span>');
+ h+=L(9,11,13,'SALES ADVISOR:');h+=Vv(10,11,10,13,V.sa);h+=Vv(11,11,11,13,V.satel);
+ // order particulars
+ h+=L(14,1,6,'Order Partiulars','b s11');
+ const grid=[[15,'MODEL','model','DESCRIPTION','desc'],[16,'ENGINE NO','engine','ENGINE C.C','cc'],[17,'CHASSIS NO','chassis','SALES TYPE','stype'],[18,'COLOUR','colour','TERM','term']];
+ for(const [r,l1,k1,l2,k2] of grid){
+  h+=cell('c bx b',r,1,r,2,l1)+cell('c bx v',r,3,r,6,esc(V[k1]))+cell('c bx b',r,7,r,8,l2)+cell('c bx v',r,9,r,11,esc(V[k2]));
+ }
+ h+=cell('c bx b m s8',15,12,16,13,'Appoximate<br>Delivery Date');
+ h+=cell('c bx v m',17,12,18,13,esc(V.deliv));
+ // price structure
+ h+=L(20,1,6,'PRICE STRUCTURE','b s11');h+=L(20,7,8,'RM','b m');h+=L(20,10,13,'FINANCE','b s11');
+ const pl=[[21,'GOVT APPOVED  NET SELLING PRICE',ms('net')],[22,'GOVT APPOVED STANDART ACCESSORIES',ms('std')],[23,'SUB TOTAL',A('g23')],[24,'INPECTION FEE',ms('insp')],[25,'ADMIN HANDLING',ms('admin')],[26,'NUMBER PLATE',ms('plate')],[27,'METALLIC PAINT',ms('metal')],[28,'OPTIONAL ACCESSORIES PACKAGE GEAR UP',ms('opt')]];
+ for(const [r,l,v] of pl){h+=L(r,1,6,l);h+=cell('c v r bx',r,7,r,8,v)}
+ // finance
+ [[21,'MADE YEAR',V.fyear],[22,'AMOUNT FINANCED',money(V.famt)],[23,'FINANCE PERIOD',V.fper]].forEach(([r,l,v])=>{h+=L(r,10,11,l);h+=cell('c v bx',r,12,r,13,esc(v))});
+ // accessories lines
+ ACC.forEach((i,j)=>{const r=29+j;h+=cell('c v bb',r,1,r,3,esc(V['acc'+i]));h+=cell('c v r bb',r,5,r,5,ms('acca'+i))});
+ h+=L(34,5,6,'APA TOTAL','b r');h+=cell('c v r bx',34,7,34,8,A('apa'));
+ h+=L(35,1,3,'MISCELLANEOUS');h+=cell('c v r bx',35,7,35,8,ms('misc'));
+ h+=L(36,1,3,'SUB TOTAL');h+=cell('c v r bx',36,7,36,8,A('g36'));
+ h+=L(37,1,3,'LESS');h+=cell('c v r bx',37,7,37,8,ms('less'));
+ // trade-in
+ h+=L(30,10,13,'TRADE -IN VEHICLE PARTICULARS','b s11');
+ [[31,'APPRAISAL NUMBER',V.ta_no],[32,'APPRAISAL DATE',dfmt(V.ta_date)],[33,'MODEL DESCRIPTION',V.ta_model],[34,'REGISTRATION NUMBER',V.ta_reg],[35,'YEAR OF MANUFACTURED',V.ta_ymf],[36,'YEAR OF REGISTRATION',V.ta_yreg]].forEach(([r,l,v])=>{h+=L(r,10,11,l,'s8');h+=cell('c v bx',r,12,r,13,esc(v))});
+ // totals
+ h+=L(39,1,6,'SUB TOTAL WITHOUT GOOD SERVICE TAX');h+=cell('c v r bx',39,7,39,8,A('h39'));
+ h+=cell('c bx top',39,10,45,13,'<div><b>*REMARK</b><br><span class="v" style="font-size:10.5pt;font-weight:600;white-space:pre-wrap">'+esc(V.remark)+'</span></div>');
+ h+=L(40,1,3,'GOOD SERVIS TAX (GST)');h+=cell('c',40,4,40,4,esc(String(N(V.rate)))+'%');h+=cell('c v r bx',40,7,40,8,A('gst'));
+ const t2=[[41,'CUKAI BARANG & PERKHIDMATAN',ms('sst')],[42,'SUB TOTAL WITH GST',A('g42')],[43,'ROAD TAX',ms('road')],[44,'REGISTRATION FEES',ms('regfee')],[45,'HP OWNERSHIP',ms('hp')],[46,'INSUREN PREMIUM',ms('ins')],[47,'TOTAL PRICE WITH GST',A('g47')],[48,'ROUNDING ADJUSTMENT',A('g48')],[49,'PURCHASE PRICE',A('g49')]];
+ for(const [r,l,v] of t2){h+=L(r,1,6,l,[42,47,49].includes(r)?'b':'');h+=cell('c v r bx',r,7,r,8,v)}
+ h+=L(51,1,6,'LESS PAYMENT','b');
+ [[52,'OUTSTANDING SUM',A('g52')],[53,'TRADE-IN PRICE',ms('tradein')],[54,'HP SETTLEMENT',ms('hpset')],[55,'TOTAL OUTSTANDING',A('g55')]].forEach(([r,l,v])=>{h+=L(r,1,6,l,r===55?'b':'');h+=cell('c v r bx',r,7,r,8,v)});
+ h+=cell('bt',58,1,58,13,'');
+ h+=L(59,1,1,'Note','s8 b');
+ ['1.All payment by CHEQUES should be crossed and made payable to " YUSMANIDA AUTO SDN BHD','2.Insist on  official Receipt immediately if payment is made by CASH .if you do not receive an Officer Receipt within seven','days,please notify the manager immediately.','3.the credit term if any should be strictly dhered to failing which interest at 1.5% per month will be charged'].forEach((t,i)=>h+=cell('c s8',59+i,2,59+i,13,t));
+ const sh=$('#sheet');sh.style.gridTemplateRows=ROWS.slice(1).map(x=>x+'pt').join(' ');
+ sh.innerHTML=h;
+}
+/* ===== scaling ===== */
+function fit(){
+ const box=$('#sbox'),st=box.parentElement;
+ if(getComputedStyle(st).display==='none'||box.offsetParent===null)return;
+ const W=st.clientWidth-20,pw=595.2*96/72,s=Math.min(1,W/pw);
+ $('#page').style.transform='scale('+s+')';
+ box.style.width=pw*s+'px';box.style.height=841.68*96/72*s+'px';
+}
+function update(skip){syncForm(skip);paper();persist();fit()}
+
+/* ===== actions ===== */
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2600)}
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
+async function makePdf(){
+ if(!window.html2canvas)await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+ if(!window.jspdf)await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+ if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+ const host=document.createElement('div');host.style.cssText='position:fixed;left:-10000px;top:0';
+ const cl=$('#page').cloneNode(true);cl.style.transform='none';host.appendChild(cl);document.body.appendChild(host);
+ try{
+  const cv=await html2canvas(cl,{scale:3,backgroundColor:'#fff',useCORS:true});
+  const pdf=new jspdf.jsPDF({unit:'pt',format:'a4',compress:true});
+  pdf.addImage(cv.toDataURL('image/jpeg',.92),'JPEG',0,0,595.28,841.89,undefined,'FAST');
+  return pdf.output('blob');
+ }finally{host.remove()}
+}
+const fname=()=>'SALES ORDER '+(V.cname||'').replace(/[^\w ]+/g,'').trim().toUpperCase().slice(0,30)+'.pdf';
+async function share(){
+ toast('Menyediakan PDF…');
+ let blob;try{blob=await makePdf()}catch(e){toast('Gagal jana PDF (perlu internet)');return}
+ const f=new File([blob],fname(),{type:'application/pdf'});
+ if(navigator.canShare&&navigator.canShare({files:[f]})){
+  try{await navigator.share({files:[f],title:'Vehicle Sales Order'});return}catch(e){if(e.name==='AbortError')return}
+ }
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=f.name;document.body.appendChild(a);a.click();a.remove();
+ toast('PDF dimuat turun — lampirkan di WhatsApp');
+ setTimeout(()=>window.open('https://wa.me/?text='+encodeURIComponent('Vehicle Sales Order'+(V.cname?' - '+V.cname:'')),'_blank'),700);
+}
+/* saved orders */
+const getSaved=()=>{try{return JSON.parse(LS.get('so-saved')||'[]')}catch(e){return[]}};
+function save(){
+ const l=getSaved(),id=V._id||('o'+Date.now());V._id=id;
+ const rec={id,name:V.cname||'(tanpa nama)',model:V.model||'',t:Date.now(),V:JSON.parse(JSON.stringify(V))};
+ const i=l.findIndex(x=>x.id===id);if(i>=0)l[i]=rec;else l.unshift(rec);
+ LS.set('so-saved',JSON.stringify(l.slice(0,100)));persist();toast('Disimpan');
+}
+function showList(){
+ const l=getSaved();
+ $('#dl').innerHTML=l.length?l.map(x=>'<div class="it"><div><b>'+esc(x.name)+'</b><small>'+esc(x.model)+' · '+new Date(x.t).toLocaleDateString('en-GB')+'</small></div><button data-o="'+x.id+'">Buka</button><button class="d" data-d="'+x.id+'">Padam</button></div>').join(''):'<div class="it"><div><small>Belum ada order disimpan.</small></div></div>';
+ $('#dlg').showModal();
+}
+$('#dl').addEventListener('click',e=>{
+ const o=e.target.dataset.o,d=e.target.dataset.d;
+ if(o){const r=getSaved().find(x=>x.id===o);if(r){V=JSON.parse(JSON.stringify(r.V));V._id=r.id;update();$('#dlg').close();toast('Dibuka')}}
+ if(d){if(confirm('Padam order ini?')){LS.set('so-saved',JSON.stringify(getSaved().filter(x=>x.id!==d)));showList()}}
+});
+$('#dClose').onclick=()=>$('#dlg').close();
+$('#bList').onclick=showList;
+$('#bNew').onclick=()=>{if(confirm('Kosongkan borang dan mulakan order baru?\n(Order yang belum disimpan akan hilang)')){fresh();update();scrollTo(0,0)}};
+$('#bSave').onclick=save;
+$('#bShare').onclick=share;
+$('#bPrint').onclick=()=>{ $('#page').style.transform='';window.print();setTimeout(fit,300)};
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{$('#wrap').dataset.v=b.dataset.t;setTimeout(fit,0);scrollTo(0,0)});
+window.addEventListener('resize',fit);
+window.addEventListener('beforeprint',()=>{$('#page').style.transform='none'});
+window.addEventListener('afterprint',fit);
+load();buildForm();update();
+</script>
+</body>
+</html>
