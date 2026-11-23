@@ -99,14 +99,12 @@ const SEC=[
 ['Pelanggan',[['cname','Nama pelanggan','t',1],['addr1','Alamat 1','t',1],['addr2','Alamat 2','t',1],['addr3','Alamat 3','t',1],['addr4','Poskod / bandar','t',1],['nric','No. NRIC','t'],['tel1','Tel','t'],['tel2','Tel (2)','t'],['telg','Tel (G)','t'],['off','Office','t'],['date','Tarikh','d'],['sa','Sales advisor','t'],['satel','Tel sales advisor','t']]],
 ['Butiran kenderaan',[['model','Model','t'],['desc','Description','t'],['engine','Engine no','t'],['cc','Engine C.C','t'],['chassis','Chassis no','t'],['stype','Sales type','t'],['colour','Colour','t'],['term','Term','t'],['deliv','Approximate delivery date','t',1]]],
 ['Struktur harga (RM)',[['net','Govt approved net selling price','n',1],['std','Govt approved standard accessories','n',1],['insp','Inspection fee','n'],['admin','Admin handling','n'],['plate','Number plate','n'],['metal','Metallic paint','n'],['opt','Optional accessories package gear up','n',1]]],
-['Aksesori APA',null],
-['Lain-lain',[['misc','Miscellaneous (RM)','n'],['less','Less / diskaun (RM)','n'],['rate','GST / cukai (%)','n'],['sst','Cukai barang & perkhidmatan','n'],['road','Road tax','n'],['regfee','Registration fees','n'],['hp','HP ownership','n'],['ins','Insuran premium','n']]],
+['Lain-lain',[['misc','Miscellaneous (RM)','n'],['less','Less / diskaun (RM)','n'],['rate','GST / cukai (%)','n'],['sst','Cukai barang & perkhidmatan','n'],['road','Road tax','n'],['regfee','Registration fees','n'],['hp','HP ownership','n'],['remark','*Remark','a',1],['ins','Insuran premium','n']]],
 ['Finance',[['fyear','Made year','t'],['famt','Amount financed','n'],['fper','Finance period','t']]],
-['Trade-in',[['ta_no','Appraisal number','t'],['ta_date','Appraisal date','d'],['ta_model','Model description','t',1],['ta_reg','Registration number','t'],['ta_ymf','Year manufactured','t'],['ta_yreg','Year registration','t'],['remark','*Remark','a',1]]],
 ['Bayaran',[['tradein','Trade-in price','n'],['hpset','HP settlement','n']]],
 ['Jumlah (auto, boleh ditulis ganti)',null]
 ];
-const CALC=[['g23','Sub total'],['apa','APA total'],['g36','Sub total (misc + APA)'],['h39','Sub total tanpa GST'],['gst','GST'],['g42','Sub total dengan GST'],['g47','Total price with GST'],['g49','Purchase price'],['g52','Outstanding sum'],['g55','Total outstanding']];
+const CALC=[['g23','Sub total'],['g36','Sub total (miscellaneous)'],['h39','Sub total tanpa GST'],['gst','GST'],['g42','Sub total dengan GST'],['g47','Total price with GST'],['g49','Purchase price'],['g52','Outstanding sum'],['g55','Total outstanding']];
 const ACC=[1,2,3,4,5];
 const N=v=>{const x=parseFloat(String(v==null?'':v).replace(/,/g,''));return isNaN(x)?0:x};
 const R2=x=>Math.round((x+Number.EPSILON)*100)/100;
@@ -114,8 +112,7 @@ function calc(V){
  const o={};
  o.g23=N(V.net)+N(V.std);
  const pre=eff('g23',o,V)+N(V.insp)+N(V.admin)+N(V.plate)+N(V.metal)+N(V.opt);
- o.apa=ACC.reduce((s,i)=>s+N(V['acca'+i]),0);
- o.g36=eff('apa',o,V)+N(V.misc);
+ o.g36=N(V.misc);
  o.h39=pre+eff('g36',o,V)-N(V.less);
  o.gst=R2(eff('h39',o,V)*N(V.rate)/100);
  o.g42=eff('h39',o,V)+eff('gst',o,V)+N(V.sst);
@@ -194,7 +191,7 @@ function borders(){
   if(k==='l')put(Vv,r+','+c,w);if(k==='r')put(Vv,r+','+(c+1),w);if(k==='t')put(Hh,r+','+c,w);if(k==='b')put(Hh,(r+1)+','+c,w);}}
  let h='';
  for(const k in Vv){const [r,c]=k.split(',').map(Number);if(inMV(r,c)||r===48)continue;h+=cell('bd',r,c>13?13:c,r,c>13?13:c,'',(c>13?'border-right:':'border-left:')+W[Vv[k]])}
- for(const k in Hh){const [r,c]=k.split(',').map(Number);if(inMH(r,c))continue;h+=cell('bd',r>64?64:r,c,r>64?64:r,c,'',(r>64?'border-bottom:':'border-top:')+W[Hh[k]])}
+ for(const k in Hh){const [r,c]=k.split(',').map(Number);if(inMH(r,c)||(c<=5&&r>=29&&r<=34)||(c>=10&&r>=30&&r<=37))continue;h+=cell('bd',r>64?64:r,c,r>64?64:r,c,'',(r>64?'border-bottom:':'border-top:')+W[Hh[k]])}
  return h;
 }
 function paper(){
@@ -225,13 +222,9 @@ function paper(){
  const pl=[[21,'GOVT APPOVED  NET SELLING PRICE',ms('net'),1],[22,'GOVT APPOVED STANDART ACCESSORIES',ms('std'),0],[23,'SUB TOTAL',A('g23'),0],[24,'INPECTION FEE',ms('insp'),0],[25,'ADMIN HANDLING',ms('admin'),0],[26,'NUMBER PLATE',ms('plate'),1],[27,'METALLIC PAINT',ms('metal'),0],[28,'OPTIONAL ACCESSORIES PACKAGE GEAR UP',ms('opt'),0]];
  for(const [r,l,v,b] of pl){h+=T('s10 '+(b?'b':''),r,1,r,6,l);h+=T('s11 r '+(b?'b':''),r,7,r,8,v)}
  [[21,'MADE YEAR',X(V.fyear)],[22,'AMOUNT FINANCED',money(V.famt)],[23,'FINANCE PERIOD',X(V.fper)]].forEach(([r,l,v])=>{h+=T('b s11',r,10,r,11,l);h+=T('b s14 r',r,12,r,13,v)});
- ACC.forEach((i,j)=>{const r=29+j;h+=T('s11',r,1,r,3,X(V['acc'+i]));h+=T('s11 r',r,5,r,5,ms('acca'+i))});
- h+=T('s10',34,5,34,6,'APA TOTAL');h+=T('s11 r',34,7,34,8,A('apa'));
  h+=T('s10',35,1,35,3,'MISCELLANEOUS');h+=T('s11 r',35,7,35,8,ms('misc'));
  h+=T('s10',36,1,36,3,'SUB TOTAL');h+=T('s11 r',36,7,36,8,A('g36'));
  h+=T('s10',37,1,37,3,'LESS');h+=T('s11 r',37,7,37,8,ms('less'));
- h+=T('s10',30,10,30,13,'TRADE -IN VEHICLE PARTICULARS');
- [[31,'APPRAISAL NUMBER',V.ta_no],[32,'APPRAISAL DATE',dfmt(V.ta_date)],[33,'MODEL DESCRIPTION',V.ta_model],[34,'REGISTRATION NUMBER',V.ta_reg],[35,'YEAR OF MANUFACTURED',V.ta_ymf],[36,'YEAR OF REGISTRATION',V.ta_yreg]].forEach(([r,l,v])=>{h+=T('s10',r,10,r,11,l);h+=T('s11 r',r,12,r,13,X(v))});
  h+=T('s10',39,1,39,6,'SUB TOTAL WITHOUT GOOD SERVICE TAX');h+=T('s11 r',39,7,39,8,A('h39'));
  h+=T('s14 l',39,10,40,13,'*REMARK');
  h+=cell('c s11 top',41,10,45,13,'<span style="white-space:pre-wrap">'+X(V.remark)+'</span>');
